@@ -80,13 +80,18 @@
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="operadora" layoutX="471.0" layoutY="226.0" prefWidth="150.0" />
+                        <ChoiceBox fx:id="ChoiceBoxOperadora" layoutX="471.0" layoutY="225.0" prefWidth="150.0" />
                         <Label layoutX="516.0" layoutY="330.0" text="Grupo:">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="grupo" layoutX="471.0" layoutY="380.0" prefWidth="150.0" />
+                        <ChoiceBox fx:id="ChoiceBoxGrupo" layoutX="471.0" layoutY="380.0" prefWidth="150.0" />
+                        <Label fx:id="verificarEmailLabel" layoutX="386.0" layoutY="383.0" text="*" textFill="RED">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                </content></Tab>

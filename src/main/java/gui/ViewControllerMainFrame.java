@@ -5,14 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import services.Limitacoes;
 
 public class ViewControllerMainFrame implements Initializable {
 	@FXML
@@ -30,13 +34,19 @@ public class ViewControllerMainFrame implements Initializable {
 
 	@FXML
 	private TextField email;
+	@FXML
+	private Label verificarEmailLabel;
 
 	@FXML
-	private ChoiceBox<String> operadora;
+	private ChoiceBox<String> ChoiceBoxOperadora;
 
 	@FXML
-	private ChoiceBox<String> grupo;
+	private ChoiceBox<String> ChoiceBoxGrupo;
 
+	private ObservableList<String> obsOperadora;
+	private ObservableList<String> obsGrupo;
+	
+	
 	@FXML
 	private Button submit;
 
@@ -52,12 +62,12 @@ public class ViewControllerMainFrame implements Initializable {
 		if (email.getText().equals("")) {
 			camposVazios.add("email");
 		}
-//		if (operadora.getSelectionModel().getSelectedItem().equals("")) {
-//			camposVazios.add("operadora");
-//		}
-//		if (grupo.getSelectionModel().getSelectedItem().equals("")) {
-//			camposVazios.add("grupo");
-//		}
+		if (ChoiceBoxOperadora.getSelectionModel().getSelectedItem() == null) {
+			camposVazios.add("operadora");
+		}
+		if (ChoiceBoxGrupo.getSelectionModel().getSelectedItem() == null) {
+			camposVazios.add("grupo");
+		}
 		String camposVaziosString = "";
 		try {
 			try {
@@ -87,5 +97,28 @@ public class ViewControllerMainFrame implements Initializable {
 	//
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		List<String> operadora = new ArrayList<>();
+		operadora.add("TIM");
+		operadora.add("VIVO");
+		operadora.add("CLARO");
+		operadora.add("OI");
+		operadora.add("OUTROS");
+		
+		List<String> grupo = new ArrayList<>();
+		grupo.add("Família");
+		grupo.add("Amigos");
+		grupo.add("Trabalho");
+		grupo.add("Outros");
+		
+		obsOperadora = FXCollections.observableArrayList(operadora);
+		obsGrupo = FXCollections.observableArrayList(grupo);
+		
+		ChoiceBoxOperadora.setItems(obsOperadora);
+		ChoiceBoxGrupo.setItems(obsGrupo);
+		
+		
+		Limitacoes.LimitarTextoSoComNumeros(numero);
+		Limitacoes.regularTamanhoDoQueFoiDigitado(numero, 12);
+		Limitacoes.formatarEmail(email, verificarEmailLabel);
 	}
 }
