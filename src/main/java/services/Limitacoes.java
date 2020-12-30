@@ -13,33 +13,7 @@ public class Limitacoes {
 				txt.setText(valorAntigo);
 			}
 		});
-	}
-	
-	
-	public static void verificarEntradas(TextField nome, Label nomeAlerta, TextField dataNascimento, Label dataAlerta, TextField email, Label emailAlerta) {
-		nome.textProperty().addListener((obs, valorAntigo, valorNovo) -> {
-			if (valorNovo.length() == 0) {
-				nomeAlerta.setText("*");
-			} else {
-				nomeAlerta.setText("");
-			}
-		});
-		dataNascimento.textProperty().addListener((obs, valorAntigo, valorNovo) -> {
-			if (valorNovo.length() == 0) {
-				dataAlerta.setText("*");
-			} else {
-				dataAlerta.setText("");
-			}
-		});
-		email.textProperty().addListener((obs, valorAntigo, valorNovo) -> {
-			if (valorNovo.length() == 0) {
-				emailAlerta.setText("*");
-			} else {
-				emailAlerta.setText("");
-			}
-		});
-	}
-	
+	}	
 	
 	public static void formatarEmail(TextField txt, Label label) {
 		txt.textProperty().addListener((obs, valorAntigo, valorNovo) -> {
