@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import entities.Contato;
+import entities.dao.ContatoDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +21,9 @@ import javafx.scene.layout.Pane;
 import services.Limitacoes;
 
 public class ViewControllerMainFrame implements Initializable {
+	
+	private final ContatoDAO dao = new ContatoDAO();
+	
 	@FXML
 	private Pane paneEsquerda;
 	@FXML
@@ -85,18 +90,32 @@ public class ViewControllerMainFrame implements Initializable {
 		if(camposVazios.size()==1) {
 			camposVaziosString+= camposVazios.get(0);
 		}
-		if (camposVaziosString.equals("")) {
-			Alerts.showAlert("Sucesso", "Usuário cadastrado com sucesso no noss banco de dados", null,
-					AlertType.CONFIRMATION);
-		} else {
+		if (!camposVaziosString.equals("")) {
 			Alerts.showAlert("Erro", "Não foi possível concluir o cadastro do contato!",
 					"Campos vazios: " + camposVaziosString + ".", AlertType.ERROR);
+		} else {
+			Contato contato = new Contato(null, nome.getText(), numero.getText(), email.getText(), ChoiceBoxOperadora.getSelectionModel().getSelectedItem(), ChoiceBoxGrupo.getSelectionModel().getSelectedItem());
+			if(dao.addContato(contato)) {
+				Alerts.showAlert("Sucesso", "Usuário cadastrado com sucesso no nosso banco de dados", null,
+						AlertType.CONFIRMATION);	
+				limparCampos();
+			} else {
+				Alerts.showAlert("Erro", "Não foi possível concluir o cadastro do contato!",
+						"Consulte a documentação ou fale com o nosso desenvolvedor.", AlertType.ERROR);
+			}
 		}
 	}
 
+	private void limparCampos() {
+		nome.setText("");
+		numero.setText("");
+		email.setText("");
+		organizarCheckBox();
+	}
+
 	//
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	
+	private void organizarCheckBox() {
 		List<String> operadora = new ArrayList<>();
 		operadora.add("TIM");
 		operadora.add("VIVO");
@@ -115,7 +134,11 @@ public class ViewControllerMainFrame implements Initializable {
 		
 		ChoiceBoxOperadora.setItems(obsOperadora);
 		ChoiceBoxGrupo.setItems(obsGrupo);
-		
+	}
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		organizarCheckBox();
 		
 		Limitacoes.LimitarTextoSoComNumeros(numero);
 		Limitacoes.regularTamanhoDoQueFoiDigitado(numero, 12);

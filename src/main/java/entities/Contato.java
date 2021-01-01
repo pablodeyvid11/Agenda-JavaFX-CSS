@@ -2,12 +2,20 @@ package entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Contato implements Comparable<Contato>, Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
-	private Double numero;
+	private String numero;
 	private String email;
 	private String operadora;
 	private String grupo;
@@ -16,7 +24,7 @@ public class Contato implements Comparable<Contato>, Serializable {
 	public Contato() {
 	}
 	
-	public Contato(Integer id, String nome, Double numero, String email, String operadora, String grupo) {
+	public Contato(Integer id, String nome, String numero, String email, String operadora, String grupo) {
 		this.id = id;
 		this.nome = nome;
 		this.numero = numero;
@@ -33,11 +41,11 @@ public class Contato implements Comparable<Contato>, Serializable {
 		this.nome = nome;
 	}
 
-	public Double getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Double numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
@@ -107,5 +115,24 @@ public class Contato implements Comparable<Contato>, Serializable {
 		} else if (!numero.equals(other.numero))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Contato:\n[id=");
+		builder.append(id);
+		builder.append(";,\nnome=");
+		builder.append(nome);
+		builder.append(";,\nnumero=");
+		builder.append(numero);
+		builder.append(";,\nemail=");
+		builder.append(email);
+		builder.append(";,\noperadora=");
+		builder.append(operadora);
+		builder.append(";,\ngrupo=");
+		builder.append(grupo);
+		builder.append("].");
+		return builder.toString();
 	}
 }
