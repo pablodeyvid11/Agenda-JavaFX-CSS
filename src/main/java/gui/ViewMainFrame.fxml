@@ -110,11 +110,14 @@
                               <TableColumn prefWidth="83.0" text="Grupo" />
                           </columns>
                         </TableView>
-                        <Label layoutX="14.0" layoutY="534.0" text="Classificar por:">
+                        <Label layoutX="14.0" layoutY="531.0" text="Classificar por:">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
+                        <ChoiceBox fx:id="ChoiceBoxClassificacao" layoutX="139.0" layoutY="528.0" prefHeight="34.0" prefWidth="150.0" />
+                        <Button fx:id="delete" layoutX="565.0" layoutY="528.0" mnemonicParsing="false" text="Deletar contato" />
+                        <Button fx:id="edit" layoutX="412.0" layoutY="529.0" mnemonicParsing="false" text="Editar contato" />
                      </children></Pane>
                </content></Tab>
         </tabs>

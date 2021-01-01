@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -129,12 +130,41 @@ public class ViewControllerMainFrame implements Initializable {
 		grupo.add("Trabalho");
 		grupo.add("Outros");
 		
+		List<String> classificacoes = new ArrayList<>();
+		classificacoes.add("Nome");
+		classificacoes.add("Email");
+		classificacoes.add("Operadora");
+		classificacoes.add("Grupo");
+		
+		
 		obsOperadora = FXCollections.observableArrayList(operadora);
 		obsGrupo = FXCollections.observableArrayList(grupo);
+		obsClassificacao = FXCollections.observableArrayList(classificacoes);
 		
 		ChoiceBoxOperadora.setItems(obsOperadora);
 		ChoiceBoxGrupo.setItems(obsGrupo);
+		ChoiceBoxClassificacao.setItems(obsClassificacao);
+		ChoiceBoxClassificacao.getSelectionModel().select(0);
 	}
+	
+	
+	// Área Lista de contatos
+	
+	@FXML
+	private ChoiceBox<String> ChoiceBoxClassificacao;
+
+	private ObservableList<String> obsClassificacao;
+	
+	
+	
+	@FXML
+	private Button delete;
+	
+	@FXML
+	private Button edit;
+	
+	
+	
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
