@@ -74,6 +74,7 @@ public class ViewControllerUpdate implements Initializable {
 			contatoSelecionado.setC(c);
 			dao.update(c);
 			preencherAcao();
+			Alerts.showAlert("Sucesso", "Nome alterado com sucesso", null, AlertType.CONFIRMATION);
 		}
 	}
 
@@ -97,6 +98,7 @@ public class ViewControllerUpdate implements Initializable {
 			contatoSelecionado.setC(c);
 			dao.update(c);
 			preencherAcao();
+			Alerts.showAlert("Sucesso", "Número alterado com sucesso", null, AlertType.CONFIRMATION);
 		}
 	}
 
@@ -125,6 +127,7 @@ public class ViewControllerUpdate implements Initializable {
 				contatoSelecionado.setC(c);
 				dao.update(c);
 				preencherAcao();
+				Alerts.showAlert("Sucesso", "Email alterado com sucesso", null, AlertType.CONFIRMATION);
 			}
 		}
 	}
@@ -155,6 +158,7 @@ public class ViewControllerUpdate implements Initializable {
 			contatoSelecionado.setC(c);
 			dao.update(c);
 			preencherAcao();
+			Alerts.showAlert("Sucesso", "Operadora alterado com sucesso", null, AlertType.CONFIRMATION);
 		}
 	}
 
@@ -183,6 +187,7 @@ public class ViewControllerUpdate implements Initializable {
 			contatoSelecionado.setC(c);
 			dao.update(c);
 			preencherAcao();
+			Alerts.showAlert("Sucesso", "Grupo alterado com sucesso", null, AlertType.CONFIRMATION);
 		}
 	}
 
