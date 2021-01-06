@@ -1,5 +1,5 @@
 import entities.dao.ContatoDAO;
-import gui.Alerts;
+import gui.util.Alerts;
 import javafx.scene.control.Alert.AlertType;
 
 public class test {

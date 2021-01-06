@@ -2,8 +2,8 @@ package gui.admin;
 
 import java.io.IOException;
 
-import gui.Alerts;
 import gui.admin.enums.PageType;
+import gui.util.Alerts;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -88,13 +88,13 @@ public class Page {
 	public void carregarUpdate() throws IOException {
 		Parent parentUpdate = FXMLLoader.load(getClass().getResource("../ViewUpdate.fxml"));
 		updateScene = new Scene(parentUpdate);
-		updateScene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		updateScene.getStylesheets().add(getClass().getResource("../styles/application.css").toExternalForm());
 	}
 	
 	public void carregarMainFrame() throws IOException {
 		Parent parentMainFrame = FXMLLoader.load(getClass().getResource("../ViewMainFrame.fxml"));
 		MainFrame = new Scene(parentMainFrame);
-		MainFrame.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		MainFrame.getStylesheets().add(getClass().getResource("../styles/application.css").toExternalForm());
 	}
 
 	public void show(PageType pt) {
