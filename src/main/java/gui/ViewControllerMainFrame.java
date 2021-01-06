@@ -1,4 +1,4 @@
-package gui.controllers;
+package gui;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,10 +29,10 @@ import javafx.scene.layout.Pane;
 public class ViewControllerMainFrame implements Initializable {
 
 	private final ContatoDAO dao = new ContatoDAO();
-	
+
 	private Page page;
 	private ContatoSelecionado contatoSelecionado;
-	
+
 	@FXML
 	private Pane paneEsquerda;
 	@FXML
@@ -149,23 +149,6 @@ public class ViewControllerMainFrame implements Initializable {
 	// Área Lista de contatos
 
 	@FXML
-	private Button delete;
-
-	@FXML
-	public void acaoDelete() {
-		Integer id = table.getSelectionModel().getSelectedItem().getId();
-		Contato c = dao.findById(id);
-		int decisao = Alerts.showAlert("Confirmação",
-				"Você tem certeza que deseja excluir o contato: " + c.getNome() + "? ",
-				"Se deseja proceguir, presse 'OK', caso não apenas feche essa notificação.", AlertType.WARNING);
-		if (decisao == 1) {
-			dao.deleteById(id);
-			atualizarTabela();
-			Alerts.showAlert("Confirmação", "Contato deletado com sucesso", null, AlertType.INFORMATION);
-		}
-	}
-
-	@FXML
 	private TableView<Contato> table;
 	private ObservableList<Contato> obsContatos;
 
@@ -189,22 +172,22 @@ public class ViewControllerMainFrame implements Initializable {
 
 		table.setItems(obsContatos);
 	}
-	
+
 	@FXML
 	private Button abrirContatoButton;
-	
+
 	@FXML
 	public void abrirContato() {
 		System.out.println("Abrir contato");
 		contatoSelecionado.setC((table.getSelectionModel().getSelectedItem()));
 		page.show(PageType.UPDATE);
 	}
-	
+
 	@FXML
 	public void botaoFechar() {
 		page.close(false);
 	}
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		page = Page.createPage(null);
@@ -212,22 +195,28 @@ public class ViewControllerMainFrame implements Initializable {
 		System.out.println("ControlMainFrame: " + page);
 		organizarCheckBox();
 		atualizarTabela();
+
+		Thread verificaContatoSelecionado = new Thread() {
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(table.getSelectionModel().getSelectedItem() == null) {
+						abrirContatoButton.setDisable(true);
+					} else {
+						abrirContatoButton.setDisable(false);
+					}
+				}
+			}
+		};
 		
-//		Thread verificaContatoSelecionado = new Thread() {
-//			@Override
-//			public void run() {
-//				while (true) {
-//					if(table.getSelectionModel().getSelectedItem() == null) {
-//						abrirContatoButton.setDisable(true);
-//					} else {
-//						abrirContatoButton.setDisable(false);
-//					}
-//				}
-//			}
-//		};
-//		
-//		verificaContatoSelecionado.start();
-		
+		verificaContatoSelecionado.start();
+
 		Limitacoes.LimitarTextoSoComNumeros(numero);
 		Limitacoes.regularTamanhoDoQueFoiDigitado(numero, 12);
 		Limitacoes.formatarEmail(email, verificarEmailLabel);
