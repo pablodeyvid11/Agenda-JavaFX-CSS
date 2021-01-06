@@ -1,4 +1,4 @@
-package services.enums;
+package gui.admin.enums;
 
 public enum PageType {
 	MAIN(1), UPDATE(2);

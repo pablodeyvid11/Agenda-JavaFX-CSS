@@ -6,13 +6,13 @@ import java.util.ResourceBundle;
 import entities.Contato;
 import entities.dao.ContatoDAO;
 import entities.util.ContatoSelecionado;
+import gui.admin.Page;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import services.Page;
 
 public class ViewControllerUpdate implements Initializable{
 	
@@ -81,11 +81,43 @@ public class ViewControllerUpdate implements Initializable{
 		labelEmail.setText(contatoSelecionado.getC().getEmail());
 		labelOperadora.setText(contatoSelecionado.getC().getOperadora());
 		labelGrupo.setText(contatoSelecionado.getC().getGrupo());
+		
+		System.out.println(contatoSelecionado.getC());
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		contatoSelecionado = ContatoSelecionado.contatoSelecionado();
+		
+		Thread verificarContatoSelecionado = new Thread() {
+			@Override
+			public void run() {
+				while (true) {
+					String nome = contatoSelecionado.getC().getNome();
+					String numero = contatoSelecionado.getC().getNome();
+					String email = contatoSelecionado.getC().getEmail();
+					String operadora = contatoSelecionado.getC().getOperadora();
+					String grupo = contatoSelecionado.getC().getGrupo();
+					
+					while (true) {
+						//System.out.println(contatoSelecionado.getC());
+						if(
+								nome.equals(contatoSelecionado.getC().getNome()) && 
+								numero.equals(contatoSelecionado.getC().getNumero()) &&
+								email.equals(contatoSelecionado.getC().getEmail())  &&
+								operadora.equals(contatoSelecionado.getC().getOperadora()) &&
+								grupo.equals(contatoSelecionado.getC().getGrupo()) 
+						) {} else {
+							preencherCampos();
+							break;
+						}
+					}
+				}
+			}
+		};
+		
+		verificarContatoSelecionado.start();
+		
 		preencherCampos();
 		page = Page.createPage(null);
 	}

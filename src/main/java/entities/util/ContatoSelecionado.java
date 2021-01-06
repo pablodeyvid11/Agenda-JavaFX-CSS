@@ -3,7 +3,6 @@ package entities.util;
 import entities.Contato;
 
 public class ContatoSelecionado {
-
 	private static ContatoSelecionado ctt;
 
 	private Contato c;
@@ -24,5 +23,9 @@ public class ContatoSelecionado {
 
 	public void setC(Contato c) {
 		this.c = c;
+	}
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

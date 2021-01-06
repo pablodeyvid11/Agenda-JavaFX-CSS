@@ -11,8 +11,8 @@
    <children>
       <Pane fx:id="paneEsquerda" layoutY="-3.0" prefHeight="507.0" prefWidth="232.0">
          <children>
-            <Button fx:id="delete" layoutX="42.0" layoutY="460.0" mnemonicParsing="false" text="Deletar contato" />
-            <Button fx:id="fechar" layoutY="-1.0" mnemonicParsing="false" text="X" />
+            <Button fx:id="delete" layoutX="42.0" layoutY="460.0" mnemonicParsing="false" onAction="#acaoDelete" text="Deletar contato" />
+            <Button fx:id="fechar" layoutY="-1.0" mnemonicParsing="false" onAction="#acaoFechar" text="X" />
             <Label layoutX="63.0" layoutY="51.0" text="Editar" textFill="WHITE">
                <font>
                   <Font name="Consolas" size="32.0" />

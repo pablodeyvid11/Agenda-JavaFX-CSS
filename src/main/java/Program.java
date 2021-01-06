@@ -1,6 +1,8 @@
+import entities.Contato;
+import entities.util.ContatoSelecionado;
+import gui.admin.Page;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import services.Page;
 
 public class Program extends Application {
 	private Page page;
@@ -11,6 +13,8 @@ public class Program extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		ContatoSelecionado c = ContatoSelecionado.contatoSelecionado();
+		c.setC(new Contato(0, "", "", "", "", ""));
 		page = Page.createPage(primaryStage);
 		page.carregar();
 	}

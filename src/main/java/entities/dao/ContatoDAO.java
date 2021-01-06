@@ -1,69 +1,142 @@
 package entities.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import entities.Contato;
+import services.db.Conexao;
 
 public class ContatoDAO {
-	private EntityManager em;
-
-	public ContatoDAO() {
-		this.em = Persistence.createEntityManagerFactory("maindb").createEntityManager();
-	}
-
-	
-	public List<Contato> getAll(){
-		
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		
-		CriteriaQuery<Contato> cq = cb.createQuery(Contato.class);
-		Root<Contato> root = cq.from(Contato.class);
-		CriteriaQuery<Contato> all = cq.select(root);
-		
-		TypedQuery<Contato> allQuery = em.createQuery(all);
-		return allQuery.getResultList();
-	}
-	
-	public Contato findById(Integer id) {
+	public Boolean update(Contato c) {
+		Connection con = Conexao.getConexao();
+		String sql = "UPDATE contato SET email = ?, grupo = ?, nome = ?, numero = ?, operadora = ? WHERE id = ?";
 		try {
-			return em.getReference(Contato.class, id);
-		} catch (EntityNotFoundException e) {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, c.getEmail());
+			ps.setString(2, c.getGrupo());
+			ps.setString(3, c.getNome());
+			ps.setString(4, c.getNumero());
+			ps.setString(5, c.getOperadora());
+			ps.setInt(6, c.getId());
+
+			int linhasAfetadas = ps.executeUpdate();
+			if (linhasAfetadas > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
+		return false;
 	}
-	
+
+	public List<Contato> getAll() {
+		List<Contato> contatos = new ArrayList<>();
+		Connection con = Conexao.getConexao();
+
+		String sql = "SELECT * FROM contato";
+
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				contatos.add(new Contato(rs.getInt("id"), rs.getString("nome"), rs.getString("numero"),
+						rs.getString("email"), rs.getString("operadora"), rs.getString("grupo")));
+			}
+
+			ps.close();
+		} catch (SQLException u) {
+			throw new RuntimeException(u);
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contatos;
+	}
+
+	public Contato findById(Integer id) {
+		Contato contato = null;
+
+		Connection con = Conexao.getConexao();
+
+		String sql = "SELECT * FROM contato WHERE id = ?";
+
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				contato = new Contato(rs.getInt("id"), rs.getString("nome"), rs.getString("numero"),
+						rs.getString("email"), rs.getString("operadora"), rs.getString("grupo"));
+				break;
+			}
+			ps.close();
+		} catch (SQLException u) {
+			throw new RuntimeException(u);
+		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return contato;
+	}
+
 	public Contato deleteById(Integer id) {
 		Contato c = findById(id);
+		Connection con = Conexao.getConexao();
+
+		String sql = "DELETE FROM contato WHERE id = ?";
+
 		try {
-			em.getTransaction().begin();
-			em.remove(c);
-			em.getTransaction().commit();
-		} catch (Exception e){
-			e.printStackTrace();
-			return null;
+			PreparedStatement ps = con.prepareStatement(sql);
+
+			ps.setInt(1, id);
+
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException u) {
+			throw new RuntimeException(u);
 		}
-		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return c;
 	}
 
-	public Boolean addContato(Contato contato) {
+	public Boolean addContato(Contato c) {
+		Connection con = Conexao.getConexao();
+
+		String sql = "INSERT INTO contato(email, grupo, nome, numero, operadora) VALUES(?, ?, ?, ?, ?)";
+
 		try {
-			em.getTransaction().begin();
-			em.persist(contato);
-			em.getTransaction().commit();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, c.getEmail());
+			ps.setString(2, c.getGrupo());
+			ps.setString(3, c.getNome());
+			ps.setString(4, c.getNumero());
+			ps.setString(5, c.getOperadora());
+			
+			ps.execute();
+			ps.close();
+		} catch (SQLException u) {
+			u.printStackTrace();
 			return false;
 		}
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 }
