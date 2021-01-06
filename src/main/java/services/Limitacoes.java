@@ -27,17 +27,6 @@ public class Limitacoes {
 		});
 	}
 	
-	public static void limitarFormatarData(TextField txt) {
-		txt.textProperty().addListener((obs, valorAntigo, valorNovo) -> {
-			if (valorNovo.length() >= valorAntigo.length() && valorNovo.length() == 2) {
-				txt.setText(valorAntigo + "/");
-			}
-			if (valorNovo.length() >= valorAntigo.length() && valorNovo.length() == 5) {
-				txt.setText(valorAntigo + "/");
-			}
-		});
-	}
-	
 	public static void regularTamanhoDoQueFoiDigitado(TextField txt, int tamanhoMaximo) {
 		txt.textProperty().addListener((obs, valorAntigo, valorNovo) -> {
 			if (valorNovo != null && valorNovo.length() > tamanhoMaximo) {

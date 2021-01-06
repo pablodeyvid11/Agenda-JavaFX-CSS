@@ -1,8 +1,10 @@
 import entities.dao.ContatoDAO;
+import gui.Alerts;
+import javafx.scene.control.Alert.AlertType;
 
 public class test {
 	public static void main(String[] args) {
-		ContatoDAO dao = new ContatoDAO();
-		System.out.println(dao.deleteById(1).toString());
+		int decisao = Alerts.showAlert("Confirmação", "Você tem certeza que deseja excluir o contato? ",
+				"Se deseja proceguir, presse 'OK', caso não apenas feche essa notificação.", AlertType.WARNING);
 	}
 }

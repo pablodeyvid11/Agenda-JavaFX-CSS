@@ -47,6 +47,28 @@
 }
 
 
+#fechar {
+	-fx-padding: 5 22 5 22;   
+    -fx-border-width: 0px 1px 1px 0px;
+    -fx-border-radius: 0px 0px 50px 0px;
+    -fx-background-color: #2381E9;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-weight: bolder;
+    -fx-font-size: 11pt;
+    -fx-text-fill: 	#DC143C;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+#delete {
+	-fx-background-color: #8B0000;
+}
+
+#editNome, #editNumero, #editEmail, #editOperadora, #editGrupo {
+	-fx-background-color: #4F4F4F;
+	-fx-font-size: 10px;
+	-fx-padding: 1px;
+}
+
 .button {
     -fx-padding: 5 22 5 22;   
     -fx-border-color: #e2e2e2;

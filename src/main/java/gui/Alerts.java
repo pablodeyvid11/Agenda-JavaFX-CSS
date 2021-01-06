@@ -15,10 +15,18 @@ public class Alerts {
 		alert.setContentText(conteudo);
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK){
-		    return 1;
-		} else {
-		    return 0;
+		try {
+			if (result.get() == ButtonType.OK) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			return 0;
 		}
+	}
+	
+	public static void showUpdateAlert() {
+		
 	}
 }

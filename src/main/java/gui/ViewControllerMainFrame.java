@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.ResourceBundle;
 
 import entities.Contato;
 import entities.dao.ContatoDAO;
+import entities.util.ContatoSelecionado;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,15 +17,21 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import services.Limitacoes;
+import services.Page;
+import services.enums.PageType;
 
 public class ViewControllerMainFrame implements Initializable {
-	
+
 	private final ContatoDAO dao = new ContatoDAO();
+	
+	private Page page;
+	private ContatoSelecionado contatoSelecionado;
 	
 	@FXML
 	private Pane paneEsquerda;
@@ -51,8 +59,7 @@ public class ViewControllerMainFrame implements Initializable {
 
 	private ObservableList<String> obsOperadora;
 	private ObservableList<String> obsGrupo;
-	
-	
+
 	@FXML
 	private Button submit;
 
@@ -88,17 +95,20 @@ public class ViewControllerMainFrame implements Initializable {
 			camposVaziosString += camposVazios.get(camposVazios.size() - 1);
 		} catch (Exception e) {
 		}
-		if(camposVazios.size()==1) {
-			camposVaziosString+= camposVazios.get(0);
+		if (camposVazios.size() == 1) {
+			camposVaziosString += camposVazios.get(0);
 		}
 		if (!camposVaziosString.equals("")) {
 			Alerts.showAlert("Erro", "Não foi possível concluir o cadastro do contato!",
 					"Campos vazios: " + camposVaziosString + ".", AlertType.ERROR);
 		} else {
-			Contato contato = new Contato(null, nome.getText(), numero.getText(), email.getText(), ChoiceBoxOperadora.getSelectionModel().getSelectedItem(), ChoiceBoxGrupo.getSelectionModel().getSelectedItem());
-			if(dao.addContato(contato)) {
+			Contato contato = new Contato(null, nome.getText(), numero.getText(), email.getText(),
+					ChoiceBoxOperadora.getSelectionModel().getSelectedItem(),
+					ChoiceBoxGrupo.getSelectionModel().getSelectedItem());
+			if (dao.addContato(contato)) {
 				Alerts.showAlert("Sucesso", "Usuário cadastrado com sucesso no nosso banco de dados", null,
-						AlertType.CONFIRMATION);	
+						AlertType.CONFIRMATION);
+				atualizarTabela();
 				limparCampos();
 			} else {
 				Alerts.showAlert("Erro", "Não foi possível concluir o cadastro do contato!",
@@ -115,7 +125,7 @@ public class ViewControllerMainFrame implements Initializable {
 	}
 
 	//
-	
+
 	private void organizarCheckBox() {
 		List<String> operadora = new ArrayList<>();
 		operadora.add("TIM");
@@ -123,52 +133,100 @@ public class ViewControllerMainFrame implements Initializable {
 		operadora.add("CLARO");
 		operadora.add("OI");
 		operadora.add("OUTROS");
-		
+
 		List<String> grupo = new ArrayList<>();
 		grupo.add("Família");
 		grupo.add("Amigos");
 		grupo.add("Trabalho");
 		grupo.add("Outros");
-		
-		List<String> classificacoes = new ArrayList<>();
-		classificacoes.add("Nome");
-		classificacoes.add("Email");
-		classificacoes.add("Operadora");
-		classificacoes.add("Grupo");
-		
-		
+
 		obsOperadora = FXCollections.observableArrayList(operadora);
 		obsGrupo = FXCollections.observableArrayList(grupo);
-		obsClassificacao = FXCollections.observableArrayList(classificacoes);
-		
 		ChoiceBoxOperadora.setItems(obsOperadora);
 		ChoiceBoxGrupo.setItems(obsGrupo);
-		ChoiceBoxClassificacao.setItems(obsClassificacao);
-		ChoiceBoxClassificacao.getSelectionModel().select(0);
 	}
-	
-	
-	// Área Lista de contatos
-	
-	@FXML
-	private ChoiceBox<String> ChoiceBoxClassificacao;
 
-	private ObservableList<String> obsClassificacao;
-	
-	
-	
+	// Área Lista de contatos
+
 	@FXML
 	private Button delete;
+
+	@FXML
+	public void acaoDelete() {
+		Integer id = table.getSelectionModel().getSelectedItem().getId();
+		Contato c = dao.findById(id);
+		int decisao = Alerts.showAlert("Confirmação",
+				"Você tem certeza que deseja excluir o contato: " + c.getNome() + "? ",
+				"Se deseja proceguir, presse 'OK', caso não apenas feche essa notificação.", AlertType.WARNING);
+		if (decisao == 1) {
+			dao.deleteById(id);
+			atualizarTabela();
+			Alerts.showAlert("Confirmação", "Contato deletado com sucesso", null, AlertType.INFORMATION);
+		}
+	}
+
+	@FXML
+	private TableView<Contato> table;
+	private ObservableList<Contato> obsContatos;
+
+	private void organizar(List<Contato> contatos) {
+		contatos.sort((c1, c2) -> {
+			return c1.getNome().compareTo(c2.getNome());
+		});
+	}
+
+	private void atualizarTabela() {
+
+		List<Contato> contatos = dao.getAll();
+		obsContatos = FXCollections.observableArrayList(contatos);
+		organizar(obsContatos);
+
+		table.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("nome"));
+		table.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("numero"));
+		table.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("email"));
+		table.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("operadora"));
+		table.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("grupo"));
+
+		table.setItems(obsContatos);
+	}
 	
 	@FXML
-	private Button edit;
+	private Button abrirContatoButton;
 	
+	@FXML
+	public void abrirContato() {
+		System.out.println("Abrir contato");
+		contatoSelecionado.setC((table.getSelectionModel().getSelectedItem()));
+		page.show(PageType.UPDATE);
+	}
 	
-	
+	@FXML
+	public void botaoFechar() {
+		page.close(false);
+	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		page = Page.createPage(null);
+		contatoSelecionado = ContatoSelecionado.contatoSelecionado();
+		System.out.println("ControlMainFrame: " + page);
 		organizarCheckBox();
+		atualizarTabela();
+		
+//		Thread verificaContatoSelecionado = new Thread() {
+//			@Override
+//			public void run() {
+//				while (true) {
+//					if(table.getSelectionModel().getSelectedItem() == null) {
+//						abrirContatoButton.setDisable(true);
+//					} else {
+//						abrirContatoButton.setDisable(false);
+//					}
+//				}
+//			}
+//		};
+//		
+//		verificaContatoSelecionado.start();
 		
 		Limitacoes.LimitarTextoSoComNumeros(numero);
 		Limitacoes.regularTamanhoDoQueFoiDigitado(numero, 12);
