@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ViewControllerUpdate">
    <children>
       <Pane fx:id="paneEsquerda" layoutY="-3.0" prefHeight="507.0" prefWidth="232.0">
@@ -23,7 +22,6 @@
                   <Font name="Consolas" size="46.0" />
                </font>
             </Label>
-            <Button fx:id="preencher" layoutX="60.0" layoutY="413.0" mnemonicParsing="false" onAction="#preencherAcao" text="Preencher" />
          </children>
       </Pane>
       <Label layoutX="245.0" layoutY="57.0" text="Nome:">

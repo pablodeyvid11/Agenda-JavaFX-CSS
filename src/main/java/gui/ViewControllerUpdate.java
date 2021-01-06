@@ -24,7 +24,6 @@ public class ViewControllerUpdate implements Initializable {
 	private Page page;
 	ContatoSelecionado contatoSelecionado;
 	private final ContatoDAO dao = new ContatoDAO();
-	private Thread verificarContatoSelecionado;
 
 	@FXML
 	private Button fechar;
@@ -85,7 +84,7 @@ public class ViewControllerUpdate implements Initializable {
 	public void acaoEditNumero() {
 		String novoNum = "";
 		try {
-			novoNum = Alerts.showAlertTextField(LabelNome.getText(), "Alterar número", "Insira o novo valor", null,
+			novoNum = Alerts.showAlertTextField(labelNumero.getText(), "Alterar número", "Insira o novo valor", null,
 					true);
 		} catch (Exception e) {
 		}
@@ -198,10 +197,6 @@ public class ViewControllerUpdate implements Initializable {
 	@FXML
 	private Label labelGrupo;
 
-	@FXML
-	private Button preencher;
-
-	@FXML
 	public void preencherAcao() {
 		limparCampos();
 		preencherCampos();
@@ -222,45 +217,19 @@ public class ViewControllerUpdate implements Initializable {
 		labelOperadora.setText(contatoSelecionado.getC().getOperadora());
 		labelGrupo.setText(contatoSelecionado.getC().getGrupo());
 	}
-
-//	public void verificarContatoSelecionado() {
-//		verificarContatoSelecionado = new Thread() {
-//			@Override
-//			public void run() {
-//				while (true) {
-//					String nome = contatoSelecionado.getC().getNome();
-//					String numero = contatoSelecionado.getC().getNome();
-//					String email = contatoSelecionado.getC().getEmail();
-//					String operadora = contatoSelecionado.getC().getOperadora();
-//					String grupo = contatoSelecionado.getC().getGrupo();
-//
-//					while (true) {
-//						try {
-//							Thread.sleep(100);
-//						} catch (InterruptedException e) {
-//						}
-//						if (nome.equals(contatoSelecionado.getC().getNome())
-//								&& numero.equals(contatoSelecionado.getC().getNumero())
-//								&& email.equals(contatoSelecionado.getC().getEmail())
-//								&& operadora.equals(contatoSelecionado.getC().getOperadora())
-//								&& grupo.equals(contatoSelecionado.getC().getGrupo())) {
-//						} else {
-//							preencherCampos();
-//							break;
-//						}
-//					}
-//				}
-//			}
-//		};
-//
-//		verificarContatoSelecionado.start();
-//	}
-
+	
+	private void setLabels() {
+		page.setLabelEmail(labelEmail);
+		page.setLabelGrupo(labelGrupo);
+		page.setLabelNome(LabelNome);
+		page.setLabelNumero(labelNumero);
+		page.setLabelOperadora(labelOperadora);
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		contatoSelecionado = ContatoSelecionado.contatoSelecionado();
-		// verificarContatoSelecionado();
-		preencherCampos();
 		page = Page.createPage(null);
+		setLabels();
 	}
 }

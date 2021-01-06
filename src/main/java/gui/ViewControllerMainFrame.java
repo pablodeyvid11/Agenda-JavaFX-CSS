@@ -180,9 +180,18 @@ public class ViewControllerMainFrame implements Initializable {
 	public void abrirContato() {
 		System.out.println("Abrir contato");
 		contatoSelecionado.setC((table.getSelectionModel().getSelectedItem()));
+		preencherCampos();
 		page.show(PageType.UPDATE);
 	}
 
+	private synchronized void preencherCampos() {
+		page.getLabelNome().setText(contatoSelecionado.getC().getNome());
+		page.getLabelNumero().setText(contatoSelecionado.getC().getNumero());
+		page.getLabelEmail().setText(contatoSelecionado.getC().getEmail());
+		page.getLabelOperadora().setText(contatoSelecionado.getC().getOperadora());
+		page.getLabelGrupo().setText(contatoSelecionado.getC().getGrupo());
+	}
+	
 	@FXML
 	public void botaoFechar() {
 		page.close(false);

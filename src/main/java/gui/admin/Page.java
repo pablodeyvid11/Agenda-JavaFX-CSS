@@ -2,6 +2,8 @@ package gui.admin;
 
 import java.io.IOException;
 
+import entities.Contato;
+import entities.util.ContatoSelecionado;
 import gui.admin.enums.PageType;
 import gui.util.Alerts;
 import javafx.application.Platform;
@@ -9,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -20,6 +23,12 @@ public class Page {
 
 	private static Scene MainFrame;
 	private static Scene updateScene;
+
+	private Label LabelNome;
+	private Label labelNumero;
+	private Label labelEmail;
+	private Label labelOperadora;
+	private Label labelGrupo;
 
 	private Page(Stage primaryStage) {
 		if (primaryStage != null) {
@@ -38,8 +47,14 @@ public class Page {
 		}
 	}
 
+	private static void carregarContatoSelecionado() {
+		ContatoSelecionado c = ContatoSelecionado.contatoSelecionado();
+		c.setC(new Contato(0, "", "", "", "", ""));
+	}
+
 	public static Page createPage(Stage primaryStage) {
 		if (page == null && primaryStage != null) {
+			carregarContatoSelecionado();
 			page = new Page(primaryStage);
 		}
 		return page;
@@ -57,7 +72,7 @@ public class Page {
 	public void hide() {
 		mainStage.hide();
 	}
-	
+
 	public void close(boolean mandatory) {
 		int escolha = 0;
 		if (mandatory) {
@@ -90,7 +105,7 @@ public class Page {
 		updateScene = new Scene(parentUpdate);
 		updateScene.getStylesheets().add(getClass().getResource("../styles/style.css").toExternalForm());
 	}
-	
+
 	public void carregarMainFrame() throws IOException {
 		Parent parentMainFrame = FXMLLoader.load(getClass().getResource("../ViewMainFrame.fxml"));
 		MainFrame = new Scene(parentMainFrame);
@@ -110,5 +125,45 @@ public class Page {
 			}
 		}
 		mainStage.show();
+	}
+
+	public Label getLabelNome() {
+		return LabelNome;
+	}
+
+	public void setLabelNome(Label labelNome) {
+		LabelNome = labelNome;
+	}
+
+	public Label getLabelNumero() {
+		return labelNumero;
+	}
+
+	public void setLabelNumero(Label labelNumero) {
+		this.labelNumero = labelNumero;
+	}
+
+	public Label getLabelEmail() {
+		return labelEmail;
+	}
+
+	public void setLabelEmail(Label labelEmail) {
+		this.labelEmail = labelEmail;
+	}
+
+	public Label getLabelOperadora() {
+		return labelOperadora;
+	}
+
+	public void setLabelOperadora(Label labelOperadora) {
+		this.labelOperadora = labelOperadora;
+	}
+
+	public Label getLabelGrupo() {
+		return labelGrupo;
+	}
+
+	public void setLabelGrupo(Label labelGrupo) {
+		this.labelGrupo = labelGrupo;
 	}
 }
